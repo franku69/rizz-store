@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Our E-commerce Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-0e3sFvIs9UOubZQoR6LzFV+BykZrbkMTwNRg9E8D6c7/PsCwDz1bMW3JX2Z4op38i5OMeo44OqT0mBf+Onb0GA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* Your existing styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-
         header {
             display: flex;
             justify-content: space-between;
@@ -25,22 +25,18 @@
             background-color: #007bff;
             color: #fff;
         }
-
         header img {
             max-height: 40px;
             border-radius: 50%;
         }
-
         h1 {
             font-size: 2rem;
             margin-bottom: 1rem;
         }
-
         p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
         }
-
         .btn {
             display: inline-block;
             padding: 0.5rem 1rem;
@@ -52,17 +48,14 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         .btn:hover {
             background-color: #218838;
         }
-
         .category-container {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
         }
-
         .category-btn {
             display: flex;
             align-items: center;
@@ -76,23 +69,19 @@
             cursor: pointer;
             margin-right: 10px;
         }
-
         .category-btn:hover {
             background-color: #0056b3;
         }
-
         .category-btn img {
             width: 20px;
             height: 20px;
             margin-right: 5px;
         }
-
         #featured-products {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
         }
-
         .product {
             width: 45%;
             margin-bottom: 20px;
@@ -100,27 +89,22 @@
             border-radius: 4px;
             overflow: hidden;
         }
-
         .product img {
             width: 100%;
             height: 450px; /* Ensure images maintain aspect ratio */
             display: block;
         }
-
         .product-info {
             padding: 10px;
         }
-
         .product-title {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
-
         .product-price {
             font-size: 1.25rem;
             color: #007bff;
         }
-
         #search-bar {
             display: flex;
             align-items: center;
@@ -131,7 +115,6 @@
             background-color: #fff;
             position: relative;
         }
-
         #search-bar input[type="text"] {
             flex: 1; /* Take remaining space */
             padding: 10px;
@@ -139,7 +122,6 @@
             border-radius: 4px;
             margin-right: 10px;
         }
-
         #search-bar button {
             padding: 10px 20px;
             background-color: #28a745;
@@ -148,11 +130,9 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         #search-bar button:hover {
             background-color: #218838;
         }
-
         #autocomplete-list {
             position: absolute;
             top: 50px;
@@ -166,16 +146,13 @@
             overflow-y: auto;
             color: black;
         }
-
         #autocomplete-list div {
             padding: 10px;
             cursor: pointer;
         }
-
         #autocomplete-list div:hover {
             background-color: #ddd;
         }
-
         #cart {
             display: none; /* Initially hide cart */
             position: fixed;
@@ -188,36 +165,46 @@
             box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000; /* Ensure cart appears above other content */
         }
-
         #cart h2 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
-
         #cart-items {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
-
         #cart-items li {
             margin-bottom: 5px;
         }
-
         #cart-summary {
             margin-top: 20px;
             border-top: 1px solid #ddd;
             padding-top: 10px;
         }
-
         #cart-summary p {
             margin: 0;
             font-size: 1.2rem;
         }
-
         #cart-summary strong {
             font-size: 1.25rem;
             color: #007bff;
+        }
+        .profile-icon {
+            position: relative;
+            cursor: pointer;
+            top:-30px;
+            left:240px;
+
+        }
+        .profile-dropdown {
+            position: absolute;
+            
+            display: none;
+            z-index: 1000;
+        }
+        .profile-icon:hover .profile-dropdown {
+            display: block;
         }
     </style>
 </head>
@@ -237,10 +224,23 @@
         <div>
             <button class="btn" id="cart-toggle-btn" onclick="toggleCart()">Cart</button>
             <a href="{{ route('product.upload') }}" class="btn">Upload Product</a>
+            <div class="profile-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F3F3F3"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                <div class="profile-dropdown">
+                    @auth
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        <a href="{{ route('register') }}" class="btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    @endauth
+                </div>
+            </div>
         </div>
     </div>
 </header>
-
 <div class="container">
     <div class="category-container">
         <button class="category-btn" data-category="all" onclick="filterProducts('all')">
@@ -270,14 +270,12 @@
         </div>
         @endforeach
     </section>
-
     <section id="promotions">
         <h2>Promotions</h2>
         <p>Check out our latest promotions and special offers!</p>
         <a href="#" class="btn">View Promotions</a>
     </section>
 </div>
-
 <div id="cart">
     <h2>Shopping Cart</h2>
     <ul id="cart-items"></ul>
@@ -287,9 +285,8 @@
         <button class="btn" onclick="checkout()">Checkout</button>
     </div>
 </div>
-
 <script>
-    let cart = [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function addToCart(productId, productName, productPrice) {
         let item = {
@@ -306,6 +303,7 @@
             cart.push(item);
         }
 
+        localStorage.setItem('cart', JSON.stringify(cart));
         updateCartUI();
     }
 
@@ -315,22 +313,48 @@
         let totalItems = 0;
         let totalAmount = 0;
 
-        cart.forEach(item => {
-            totalItems += item.quantity;
-            totalAmount += item.price * item.quantity;
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<li>Your cart is empty</li>';
+        } else {
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                totalAmount += item.price * item.quantity;
 
-            let li = document.createElement('li');
-            li.textContent = `${item.name} - ₱${item.price.toFixed(2)} x ${item.quantity}`;
-            cartItems.appendChild(li);
-        });
+                let li = document.createElement('li');
+                li.textContent = `${item.name} - ₱${item.price.toFixed(2)} x ${item.quantity}`;
+                cartItems.appendChild(li);
+            });
+        }
 
         document.getElementById('total-items').textContent = totalItems;
         document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
     }
 
     function checkout() {
-        console.log('Checkout initiated');
-        window.location.href = "{{ route('checkout.index') }}";
+        // Save the cart to local storage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Send the cart data to the server
+        fetch('/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ cart: cart })
+        }).then(response => {
+            if (response.ok) {
+                // Clear the cart and local storage
+                cart = [];
+                localStorage.removeItem('cart');
+                window.location.href = "/checkout";
+            } else {
+                alert("There was an error processing your checkout.");
+            }
+        }).catch(error => {
+            console.error("Error during checkout:", error);
+            alert("There was an error processing your checkout.");
+        });
     }
 
     function showSuggestions(query) {
@@ -355,7 +379,14 @@
 
     function toggleCart() {
         let cart = document.getElementById('cart');
-        cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
+        if (cart.style.display === 'none' || cart.style.display === '') {
+            if (cart.innerHTML.trim() === '') {
+                cart.innerHTML = '<li>Your cart is empty</li>';
+            }
+            cart.style.display = 'block';
+        } else {
+            cart.style.display = 'none';
+        }
     }
 
     function filterProducts(category) {
@@ -369,6 +400,15 @@
             }
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if we are coming back from the checkout page
+        if (performance.navigation.type === performance.navigation.TYPE_BACK_FORWARD || 
+            document.referrer.endsWith('/checkout')) {
+            // Clear the cart from localStorage
+            localStorage.removeItem('cart');
+        }
+    });
 </script>
 </body>
 </html>

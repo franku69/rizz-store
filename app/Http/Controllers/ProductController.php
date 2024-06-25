@@ -151,4 +151,38 @@ class ProductController extends Controller
     
     return view('products.index', ['products' => $products]);
 }
+
+
+public function showCheckout(Request $request)
+{
+    // Retrieve cart from session
+    $cart = session()->get('cart', []);
+
+    return view('checkout', compact('cart'));
+}
+
+public function processCheckout(Request $request)
+{
+    // Validate the cart data
+    $cart = $request->validate([
+        'cart' => 'required|array',
+        'cart.*.id' => 'required|integer',
+        'cart.*.name' => 'required|string',
+        'cart.*.price' => 'required|numeric',
+        'cart.*.quantity' => 'required|integer',
+    ]);
+
+    // Store the cart in the session
+    session()->put('cart', $cart['cart']);
+
+    return response()->json(['message' => 'Checkout processed successfully']);
+}
+public function checkout()
+{
+    // Assuming you store cart in session, modify as needed
+    $cart = session('cart', []);
+
+    // Passing the cart data to the checkout view
+    return view('checkout', compact('cart'));
+}
 }
